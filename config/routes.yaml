@@ -1,0 +1,20 @@
+controllers:
+    resource:
+        path: ../src/Store/UserInterface/Http/Controller/
+        namespace: App\Store\UserInterface\Http\Controller
+    type: attribute
+
+create_products:
+    path:       /products
+    controller: App\Store\UserInterface\Http\Controller\CreateProductListController
+    methods:    POST
+
+get_product:
+    path:       /products/{sku}
+    controller: App\Store\UserInterface\Http\Controller\GetProductController
+    methods:    GET
+
+get_product_list:
+    path:       /products
+    controller: App\Store\UserInterface\Http\Controller\GetProductListController
+    methods:    GET

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+<entity name="App\Store\Domain\Entity\Product\Product"
+        table="product"
+        repository-class="App\Store\Infrastructure\Persistence\Doctrine\Repository\DoctrineProductRepository">
+    <indexes>
+        <index name="category_idx" columns="category"/>
+    </indexes>
+    <id name="sku" type="string" />
+    <field name="name" type="string"/>
+    <field name="category" type="string"/>
+    <embedded name="price" class="App\Store\Domain\Entity\Product\Price" use-column-prefix="false" />
+</entity>
+</doctrine-mapping>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Store\Domain\Entity\Promotion\Promotion" table="promotions" inheritance-type="SINGLE_TABLE">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO" />
+        </id>
+        <discriminator-column name="type" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="sku" class="App\Store\Domain\Entity\Promotion\SkuPromotion"/>
+            <discriminator-mapping value="category" class="App\Store\Domain\Entity\Promotion\CategoryPromotion"/>
+        </discriminator-map>
+        <field name="percentage" type="integer"/>
+    </entity>
+</doctrine-mapping>

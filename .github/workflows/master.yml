@@ -1,0 +1,43 @@
+name: Master
+
+on:
+    push:
+        branches: [ master ]
+
+jobs:
+    tests-unit:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: build
+              run: make install
+
+            - name: unit tests
+              run: make test-unit
+
+    tests-acceptance:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: build
+              run: make install
+
+            - name: Acceptance tests
+              run: make test-acceptance
+
+    tests-integration:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: build
+              run: |
+                  make install
+
+            - name: Integration tests
+              run: make test-integration
