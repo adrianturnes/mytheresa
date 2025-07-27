@@ -63,10 +63,136 @@ Then you will find the report in the `coverage` folder.
 
 **Note:** Current coverage is 100%
 
+# Structure
+```scala
+src // Application source code
+|-- Shared // Shared code between different applications
+|   |-- Application
+|   |   `-- Dto
+|   |       |-- PaginatorTransformer.php
+|   |       `-- Transformer.php
+|   |-- Domain
+|   |   |-- Exception
+|   |   |   |-- ConflictException.php
+|   |   |   `-- NotFoundException.php
+|   |   `-- ValueObject
+|   |       |-- Paginate.php
+|   |       `-- PaginationResult.php
+|   |-- Infrastructure
+|   |   `-- Middleware
+|   |       `-- ErrorMiddleware.php
+|   `-- UserInterface
+|       `-- Http
+|           |-- Controller.php
+|           `-- ExceptionHandler.php
+`-- Store // Bounded context: Products and Promotions
+    |-- Application
+    |   |-- Command // Commands to create products
+    |   |   |-- CreateProductCommand.php
+    |   |   |-- CreateProductListCommand.php
+    |   |   `-- Handler
+    |   |       |-- CreateProductCommandHandler.php
+    |   |       `-- CreateProductListCommandHandler.php
+    |   |-- Dto // Data Transfer Objects for transforming data for Queries
+    |   |   |-- ProductListTransformer.php
+    |   |   `-- ProductTransformer.php
+    |   `-- Query // Queries to get products
+    |       |-- GetProductListQuery.php
+    |       |-- GetProductQuery.php
+    |       `-- Handler
+    |           |-- GetProductListQueryHandler.php
+    |           `-- GetProductQueryHandler.php
+    |-- Domain
+    |   |-- Entity
+    |   |   |-- Product
+    |   |   |   |-- Price.php
+    |   |   |   `-- Product.php
+    |   |   `-- Promotion
+    |   |       |-- CategoryPromotion.php
+    |   |       |-- Promotion.php
+    |   |       `-- SkuPromotion.php
+    |   |-- Exception
+    |   |   |-- ProductAlreadyExistsException.php
+    |   |   `-- ProductNotFoundException.php
+    |   |-- Repository // Repository Interfaces for products and promotions
+    |   |   |-- ProductRepository.php
+    |   |   `-- PromotionRepository.php
+    |   `-- Service
+    |       `-- PromotionResolver.php
+    |-- Infrastructure
+    |   `-- Persistence
+    |       `-- Doctrine
+    |           |-- DataFixtures
+    |           |   |-- ProductFixtures.php
+    |           |   `-- PromotionFixtures.php
+    |           |-- Mapping
+    |           |   |-- Product.Price.orm.xml
+    |           |   |-- Product.Product.orm.xml
+    |           |   |-- Promotion.CategoryPromotion.orm.xml
+    |           |   |-- Promotion.Promotion.orm.xml
+    |           |   `-- Promotion.SkuPromotion.orm.xml
+    |           `-- Repository
+    |               |-- DoctrineProductRepository.php
+    |               `-- DoctrinePromotionRepository.php
+    `-- UserInterface
+        `-- Http
+            `-- Controller
+                |-- CreateProductListController.php
+                |-- GetProductController.php
+                `-- GetProductListController.php
+                
+tests // Test cases for the application
+|-- Acceptance
+|   `-- Store
+|       `-- Application
+|           |-- Command
+|           |   `-- CreateProductListTest.php
+|           `-- Query
+|               |-- GetProductListTest.php
+|               `-- GetProductTest.php
+|-- Integration
+|   `-- Store
+|       `-- Application
+|           `-- Command
+|               `-- CreateProductListCommandHandlerTest.php
+|-- Unit // Unit tests for the application replicating the structure of the application
+|   |-- Shared
+|   |   `-- UserInterface
+|   |       `-- Http
+|   |           `-- ExceptionHandlerTest.php
+|   `-- Store
+|       |-- Application
+|       |   |-- Command
+|       |   |   `-- Handler
+|       |   |       |-- CreateProductCommandHandlerTest.php
+|       |   |       `-- CreateProductListCommandHandlerTest.php
+|       |   |-- Dto
+|       |   |   |-- ProductListTransformerTest.php
+|       |   |   `-- ProductTransformerTest.php
+|       |   `-- Query
+|       |       `-- Handler
+|       |           |-- GetProductListQueryHandlerTest.php
+|       |           `-- GetProductQueryHandlerTest.php
+|       `-- Domain
+|           |-- Entity
+|           |   |-- Product
+|           |   |   |-- PriceTest.php
+|           |   |   `-- ProductTest.php
+|           |   `-- Promotion
+|           |       |-- CategoryPromotionTest.php
+|           |       `-- SkuPromotionTest.php
+|           |-- Exception
+|           |   |-- ProductAlreadyExistsExceptionTest.php
+|           |   `-- ProductNotFoundExceptionTest.php
+|           `-- Service
+|               `-- PromotionResolverTest.php
+```
+
 # Possible improvements
 * Add an elasticsearch or algolia to fully separate the read and write models to improve the reading performance and change from a CQS to a CQRS.
 * The endpoint to create products could be improved making the command asynchronous and using a message queue to handle the creation of products in the background. This will allow to have hundreds or thousands of products created without blocking the API response.
 * Due to timing, all the events are missing, but they could be used to notify the system about the changes in the products, so that other systems can react to those changes.
+* Migrate configs to bounded contexts, so that each bounded context has its own configuration.
 
 # API Documentation
 Application host: `http://localhost:8080`
